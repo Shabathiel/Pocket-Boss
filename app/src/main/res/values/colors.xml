@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Marca: azul denim -->
+    <color name="denim_50">#E8EEF7</color>
+    <color name="denim_100">#C5D5EA</color>
+    <color name="denim_200">#9FB9DB</color>
+    <color name="denim_300">#789DCB</color>
+    <color name="denim_500">#3E6FA8</color>  <!-- primario -->
+    <color name="denim_700">#264B78</color>  <!-- primario oscuro -->
+    <color name="denim_900">#12263F</color>
+
+    <!-- Semánticos -->
+    <color name="ingreso">#2E7D32</color>
+    <color name="gasto">#C62828</color>
+    <color name="texto_secundario">#6B6B6B</color>
+    <color name="texto_secundario_dark">#B0B0B0</color>
+
+    <!-- Superficies modo claro -->
+    <color name="surface_light">#FDFBFF</color>
+    <color name="surface_variant_light">#E3E2EC</color>
+
+    <!-- Superficies modo oscuro -->
+    <color name="surface_dark">#121318</color>
+    <color name="surface_variant_dark">#44464F</color>
 </resources>

@@ -4,92 +4,126 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.launch
 
 class ResumenFragment : Fragment() {
 
-    private lateinit var tvDetalle: TextView
-    private lateinit var rvTodas: RecyclerView
     private lateinit var adapter: TransaccionAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.activity_resumen, container, false)
+    ): View? {
+        return inflater.inflate(R.layout.activity_resumen, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvDetalle = view.findViewById(R.id.tvDetalleResumen)
-        rvTodas   = view.findViewById(R.id.rvTodasTransacciones)
-
+        val rv = view.findViewById<RecyclerView>(R.id.rvTodasTransacciones)
         adapter = TransaccionAdapter()
-        rvTodas.layoutManager = LinearLayoutManager(requireContext())
-        rvTodas.adapter = adapter
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.adapter = adapter
 
-        cargar()
+        cargarResumen(view)
     }
 
-    override fun onResume() {
-        super.onResume()
-        cargar()
-    }
-
-    private fun cargar() {
+    private fun cargarResumen(view: View) {
         viewLifecycleOwner.lifecycleScope.launch {
             val ctx = requireContext()
             val transacciones = AppContainer.getControlGastos(ctx).listar()
             val categorias    = AppContainer.getControlCategorias(ctx).listarCategorias()
             val mapaCat       = categorias.associateBy { it.id }
 
-            // --- Lista completa (misma que Inicio, pero sin take(10)) ---
-            adapter.actualizarDatos(transacciones, mapaCat)
-
-            // --- Texto de totales y agrupados ---
-            if (transacciones.isEmpty()) {
-                tvDetalle.text = "Aún no hay transacciones registradas."
-                return@launch
-            }
-
             var totalIngresos = 0
             var totalGastos   = 0
+            val gastosPorCategoria   = mutableMapOf<String, Int>()
+            val ingresosPorCategoria = mutableMapOf<String, Int>()
+
             transacciones.forEach { t ->
-                val esGasto = mapaCat[t.categoria]?.esGasto ?: true
-                if (esGasto) totalGastos += t.monto else totalIngresos += t.monto
+                val cat   = mapaCat[t.categoria]
+                val nombre = cat?.nombre ?: "Sin categoría"
+                val esGasto = cat?.esGasto ?: true
+
+                if (esGasto) {
+                    totalGastos += t.monto
+                    gastosPorCategoria[nombre] = (gastosPorCategoria[nombre] ?: 0) + t.monto
+                } else {
+                    totalIngresos += t.monto
+                    ingresosPorCategoria[nombre] = (ingresosPorCategoria[nombre] ?: 0) + t.monto
+                }
             }
             val balance = totalIngresos - totalGastos
 
-            val sb = StringBuilder()
-            sb.appendLine("Ingresos: Q$totalIngresos  ·  Gastos: Q$totalGastos")
-            sb.appendLine("Balance: Q$balance")
-            sb.appendLine()
+            view.findViewById<TextView>(R.id.tvTotalIngresos).text = "Q$totalIngresos"
+            view.findViewById<TextView>(R.id.tvTotalGastos).text   = "Q$totalGastos"
+            val tvBalance = view.findViewById<TextView>(R.id.tvBalanceResumen)
+            tvBalance.text = "Q$balance"
 
-            sb.appendLine("Ingresos por categoría:")
-            transacciones
-                .filter { mapaCat[it.categoria]?.esGasto == false }
-                .groupBy { it.categoria }
-                .forEach { (catId, lista) ->
-                    val nombre = mapaCat[catId]?.nombre ?: "Sin categoría"
-                    sb.appendLine("• $nombre: Q${lista.sumOf { it.monto }} (${lista.size})")
-                }
+            tvBalance.setTextColor(
+                if (balance < 0) ContextCompat.getColor(ctx, R.color.gasto)
+                else ContextCompat.getColor(ctx, R.color.ingreso)
+            )
 
-            sb.appendLine()
-            sb.appendLine("Gastos por categoría:")
-            transacciones
-                .filter { mapaCat[it.categoria]?.esGasto != false }
-                .groupBy { it.categoria }
-                .forEach { (catId, lista) ->
-                    val nombre = mapaCat[catId]?.nombre ?: "Sin categoría"
-                    sb.appendLine("• $nombre: Q${lista.sumOf { it.monto }} (${lista.size})")
-                }
+            pintarCategorias(
+                contenedor = view.findViewById(R.id.llGastosPorCategoria),
+                vacio      = view.findViewById(R.id.tvSinGastos),
+                datos      = gastosPorCategoria,
+                total      = totalGastos,
+                colorBarra = R.color.gasto
+            )
+            pintarCategorias(
+                contenedor = view.findViewById(R.id.llIngresosPorCategoria),
+                vacio      = view.findViewById(R.id.tvSinIngresos),
+                datos      = ingresosPorCategoria,
+                total      = totalIngresos,
+                colorBarra = R.color.ingreso
+            )
 
-            tvDetalle.text = sb.toString()
+            adapter.actualizarDatos(transacciones, mapaCat)
+        }
+    }
+
+    private fun pintarCategorias(
+        contenedor: LinearLayout,
+        vacio: TextView,
+        datos: Map<String, Int>,
+        total: Int,
+        colorBarra: Int
+    ) {
+        contenedor.removeAllViews()
+
+        if (datos.isEmpty() || total <= 0) {
+            vacio.visibility = View.VISIBLE
+            return
+        }
+        vacio.visibility = View.GONE
+
+        val ordenado = datos.entries.sortedByDescending { it.value }
+        val inflater = LayoutInflater.from(requireContext())
+        val color = ContextCompat.getColor(requireContext(), colorBarra)
+
+        ordenado.forEach { (nombre, monto) ->
+            val fila = inflater.inflate(R.layout.item_categoria_resumen, contenedor, false)
+
+            fila.findViewById<TextView>(R.id.tvNombreCategoria).text = nombre
+            fila.findViewById<TextView>(R.id.tvMontoCategoria).text  = "Q$monto"
+            fila.findViewById<TextView>(R.id.tvMontoCategoria).setTextColor(color)
+
+            val progreso = fila.findViewById<LinearProgressIndicator>(R.id.progressCategoria)
+            val porcentaje = ((monto.toFloat() / total.toFloat()) * 100f).toInt()
+            progreso.progress = porcentaje
+            progreso.setIndicatorColor(color)
+
+            contenedor.addView(fila)
         }
     }
 }

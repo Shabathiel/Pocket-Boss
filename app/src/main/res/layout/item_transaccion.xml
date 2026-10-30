@@ -4,11 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="4dp"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
     app:strokeWidth="0dp">
 
     <LinearLayout
@@ -16,9 +15,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
-        <!-- Círculo de color con + o - -->
         <TextView
             android:id="@+id/tvSigno"
             android:layout_width="40dp"
@@ -31,7 +29,6 @@
             android:background="@drawable/bg_circulo_signo"
             android:layout_marginEnd="12dp" />
 
-        <!-- Descripción + categoría + fecha -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,8 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Descripción"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 android:maxLines="1"
                 android:ellipsize="end" />
 
@@ -53,23 +49,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Categoría · Fecha"
-                android:textSize="12sp"
-                android:textColor="#6B6B6B"
+                android:textAppearance="@style/TextAppearance.PocketBoss.Secondary"
                 android:maxLines="1"
                 android:ellipsize="end" />
-
         </LinearLayout>
 
-        <!-- Monto -->
         <TextView
             android:id="@+id/tvMonto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Q0"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:layout_marginStart="8dp" />
-
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_inicio"
-        android:icon="@android:drawable/ic_menu_agenda"
+        android:icon="@drawable/ic_home"
         android:title="Inicio" />
     <item
         android:id="@+id/nav_resumenes"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/ic_receipt"
         android:title="Resúmenes" />
 </menu>

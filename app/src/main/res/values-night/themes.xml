@@ -1,7 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.PocketBoss" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/denim_200</item>
+        <item name="colorOnPrimary">@color/denim_900</item>
+        <item name="colorPrimaryContainer">@color/denim_700</item>
+        <item name="colorOnPrimaryContainer">@color/denim_50</item>
+
+        <item name="colorSecondary">@color/denim_300</item>
+        <item name="colorOnSecondary">@color/denim_900</item>
+
+        <item name="android:colorBackground">@color/surface_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_dark</item>
+
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <style name="TextAppearance.PocketBoss.Secondary" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/texto_secundario_dark</item>
     </style>
 </resources>

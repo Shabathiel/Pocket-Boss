@@ -1,47 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:background="?attr/colorSurface"
+    android:fillViewport="true"
     tools:context=".ResumenActivity">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Resumen General"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:orientation="vertical"
+        android:paddingBottom="24dp">
 
-    <!-- Totales + agrupados por categoría (texto) -->
-    <TextView
-        android:id="@+id/tvDetalleResumen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Aquí se mostrará el resumen de todos los gastos e ingresos."
-        android:textSize="14sp"
-        android:layout_marginBottom="12dp" />
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp"
+            android:text="Resumen general"
+            android:textAppearance="@style/TextAppearance.PocketBoss.ScreenTitle" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Todas las transacciones"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        <!-- ===== TARJETA DE BALANCE ===== -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+            app:strokeWidth="0dp">
 
-    <!-- Lista completa (mismo adapter que Inicio) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTodasTransacciones"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingHorizontal="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="16dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
 
-</LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Balance general"
+                    android:textAppearance="@style/TextAppearance.PocketBoss.Secondary"
+                    android:textColor="?attr/colorOnPrimaryContainer" />
+
+                <TextView
+                    android:id="@+id/tvBalanceResumen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Q0"
+                    android:textAppearance="@style/TextAppearance.PocketBoss.Balance"
+                    android:textColor="?attr/colorOnPrimaryContainer" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ===== TARJETAS INGRESOS / GASTOS ===== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <!-- Ingresos -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ingresos"
+                        android:textAppearance="@style/TextAppearance.PocketBoss.Secondary"
+                        android:textColor="@color/ingreso" />
+
+                    <TextView
+                        android:id="@+id/tvTotalIngresos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Q0"
+                        android:textAppearance="@style/TextAppearance.PocketBoss.Title"
+                        android:textSize="20sp"
+                        android:textColor="@color/ingreso" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Gastos -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gastos"
+                        android:textAppearance="@style/TextAppearance.PocketBoss.Secondary"
+                        android:textColor="@color/gasto" />
+
+                    <TextView
+                        android:id="@+id/tvTotalGastos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Q0"
+                        android:textAppearance="@style/TextAppearance.PocketBoss.Title"
+                        android:textSize="20sp"
+                        android:textColor="@color/gasto" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- ===== GASTOS POR CATEGORÍA ===== -->
+        <TextView
+            android:id="@+id/tvTituloGastosCat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="Gastos por categoría"
+            android:textAppearance="@style/TextAppearance.PocketBoss.Title" />
+
+        <LinearLayout
+            android:id="@+id/llGastosPorCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp" />
+
+        <TextView
+            android:id="@+id/tvSinGastos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="8dp"
+            android:text="Sin gastos registrados."
+            android:textAppearance="@style/TextAppearance.PocketBoss.Secondary"
+            android:visibility="gone" />
+
+        <!-- ===== INGRESOS POR CATEGORÍA ===== -->
+        <TextView
+            android:id="@+id/tvTituloIngresosCat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="Ingresos por categoría"
+            android:textAppearance="@style/TextAppearance.PocketBoss.Title" />
+
+        <LinearLayout
+            android:id="@+id/llIngresosPorCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp" />
+
+        <TextView
+            android:id="@+id/tvSinIngresos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="8dp"
+            android:text="Sin ingresos registrados."
+            android:textAppearance="@style/TextAppearance.PocketBoss.Secondary"
+            android:visibility="gone" />
+
+        <!-- ===== TODAS LAS TRANSACCIONES ===== -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="Todas las transacciones"
+            android:textAppearance="@style/TextAppearance.PocketBoss.Title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTodasTransacciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:paddingHorizontal="16dp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,9 +1,56 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.PocketBoss" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/denim_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/denim_100</item>
+        <item name="colorOnPrimaryContainer">@color/denim_900</item>
+
+        <item name="colorSecondary">@color/denim_300</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:colorBackground">@color/surface_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_light</item>
+
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+
+        <!-- Tipografía base -->
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.PocketBoss.Headline</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.PocketBoss.Title</item>
     </style>
 
     <style name="Theme.PocketBoss" parent="Base.Theme.PocketBoss" />
+
+    <!-- === Estilos reutilizables === -->
+
+    <style name="TextAppearance.PocketBoss.Headline" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.PocketBoss.Title" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Título de pantalla (agregar transacción, categoría, resumen) -->
+    <style name="TextAppearance.PocketBoss.ScreenTitle" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Monto grande (balance) -->
+    <style name="TextAppearance.PocketBoss.Balance" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Texto secundario (detalle, categoría · fecha) -->
+    <style name="TextAppearance.PocketBoss.Secondary" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/texto_secundario</item>
+    </style>
+
+    <!-- Botón primario grande -->
+    <style name="Widget.PocketBoss.Button" parent="Widget.Material3.Button">
+        <item name="android:layout_height">52dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

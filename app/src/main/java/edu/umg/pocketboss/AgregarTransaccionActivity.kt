@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.textfield.MaterialAutoCompleteTextView  // NUEVO
 import kotlinx.coroutines.launch
 import modelo.Categoria
 
@@ -11,7 +12,8 @@ class AgregarTransaccionActivity : AppCompatActivity() {
 
     private lateinit var etDescripcion: EditText
     private lateinit var etMonto: EditText
-    private lateinit var spinnerCategorias: Spinner
+    // CAMBIO: Spinner -> MaterialAutoCompleteTextView
+    private lateinit var spinnerCategorias: MaterialAutoCompleteTextView
     private lateinit var btnGuardar: Button
     private lateinit var rgTipo: RadioGroup
     private lateinit var rbGasto: RadioButton
@@ -25,6 +27,7 @@ class AgregarTransaccionActivity : AppCompatActivity() {
 
         etDescripcion     = findViewById(R.id.etDescripcion)
         etMonto           = findViewById(R.id.etMonto)
+        // CAMBIO: el ID es el mismo, pero el tipo cambia
         spinnerCategorias = findViewById(R.id.spinnerCategorias)
         btnGuardar        = findViewById(R.id.btnGuardarTransaccion)
         rgTipo            = findViewById(R.id.rgTipoTransaccion)
@@ -50,13 +53,17 @@ class AgregarTransaccionActivity : AppCompatActivity() {
         categoriasFiltradas = categoriasTodas.filter { it.esGasto == esGasto }
 
         val nombres = categoriasFiltradas.map { it.nombre }
+        // CAMBIO: MaterialAutoCompleteTextView se llena igual con ArrayAdapter
         val adapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_item,
+            android.R.layout.simple_list_item_1,
             nombres
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCategorias.adapter = adapter
+        spinnerCategorias.setAdapter(adapter)
+
+        // CAMBIO: limpia la selección al cambiar de tipo, para evitar
+        // que quede seleccionada una categoría del tipo anterior
+        spinnerCategorias.setText("", false)
     }
 
     private fun guardar() {
@@ -69,7 +76,18 @@ class AgregarTransaccionActivity : AppCompatActivity() {
             return
         }
 
-        val categoriaNombre = categoriasFiltradas[spinnerCategorias.selectedItemPosition].nombre
+        // CAMBIO: en lugar de selectedItemPosition, buscamos por el texto mostrado.
+        // Si el usuario no seleccionó nada, usamos la primera por defecto.
+        val categoriaNombre = spinnerCategorias.text.toString().trim()
+            .takeIf { it.isNotEmpty() }
+            ?: categoriasFiltradas.first().nombre
+
+        // Validación extra opcional: que el nombre exista entre las filtradas
+        if (categoriasFiltradas.none { it.nombre == categoriaNombre }) {
+            Toast.makeText(this, "Selecciona una categoría válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val fecha = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
             .format(java.util.Date())
 
