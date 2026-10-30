@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InicioFragment">
+
+    <!-- Contenido principal de la pantalla de inicio (Saldo, lista, etc.) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Nombre de usuario -->
+        <TextView
+            android:id="@+id/tvNombreUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hola, Usuario"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Saldo Actual -->
+        <TextView
+            android:id="@+id/tvSaldo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Saldo: Q0.00"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Título de la sección de transacciones recientes -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Últimas 10 transacciones"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Listado (RecyclerView para las 10 transacciones) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUltimasTransacciones"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="16dp"
+            tools:listitem="@android:layout/simple_list_item_2" />
+
+    </LinearLayout>
+
+    <!-- Botones flotantes (FAB) para agregar transacciones y categorías -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <!-- Botón flotante para Nueva Categoría -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAgregarCategoriaFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="Agregar Categoría"
+            app:fabSize="mini"
+            android:src="@android:drawable/ic_menu_add" />
+
+        <!-- Botón flotante principal para Nueva Transacción -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAgregarTransaccionFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Agregar Transacción"
+            android:src="@android:drawable/ic_input_add" />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

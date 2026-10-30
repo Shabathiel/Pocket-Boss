@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AgregarCategoriaActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        text="Nueva Categoría"
+        android:text="Nueva Categoría"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Nombre de la categoría -->
+    <EditText
+        android:id="@+id/etNombreCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la categoría"
+        android:inputType="text"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Etiqueta para el tipo -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tipo de categoría:"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Selector de Gasto o Ingreso (RadioGroup horizontal) -->
+    <RadioGroup
+        android:id="@+id/rgTipoCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="24dp">
+
+        <RadioButton
+            android:id="@+id/rbGasto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gasto"
+            android:checked="true"
+            android:layout_marginEnd="24dp" />
+
+        <RadioButton
+            android:id="@+id/rbIngreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingreso" />
+    </RadioGroup>
+
+    <!-- Botón de Guardar -->
+    <Button
+        android:id="@+id/btnGuardarCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Categoría" />
+
+</LinearLayout>

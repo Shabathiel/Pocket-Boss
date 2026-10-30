@@ -13,14 +13,17 @@
         android:theme="@style/Theme.PocketBoss">
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Las otras 3 pantallas que agregamos -->
+        <activity android:name=".ResumenActivity" android:exported="false" />
+        <activity android:name=".AgregarTransaccionActivity" android:exported="false" />
+        <activity android:name=".AgregarCategoriaActivity" android:exported="false" />
     </application>
 
 </manifest>

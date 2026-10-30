@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AgregarTransaccionActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nueva Transacción"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Descripción"
+        android:inputType="text"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/etMonto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Monto"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Spinner o campo provisional para categoría -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categoría:"
+        android:layout_marginBottom="4dp" />
+
+    <Spinner
+        android:id="@+id/spinnerCategorias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnGuardarTransaccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar" />
+
+</LinearLayout>
