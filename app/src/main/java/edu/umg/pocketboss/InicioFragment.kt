@@ -1,6 +1,6 @@
 package edu.umg.pocketboss
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -46,6 +46,12 @@ class InicioFragment : Fragment() {
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
+        // 👇 NUEVO: swipe para eliminar
+        crearSwipeEliminar(rv) { position ->
+            val t = adapter.getItemAt(position) ?: return@crearSwipeEliminar
+            confirmarEliminar(t)
+        }
+
         view.findViewById<FloatingActionButton>(R.id.btnAgregarTransaccionFab).setOnClickListener {
             startActivity(Intent(requireContext(), AgregarTransaccionActivity::class.java))
         }
@@ -55,6 +61,36 @@ class InicioFragment : Fragment() {
 
         verificarNombreUsuario()
         cargar()
+    }
+
+    // 👇 NUEVO método
+    private fun confirmarEliminar(t: modelo.Transaccion) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Eliminar transacción")
+            .setMessage("¿Eliminar \"${t.descripcion}\" por Q${t.monto}?")
+            .setNegativeButton("Cancelar") { _, _ ->
+                // Refresca para que la fila vuelva a su lugar
+                adapter.notifyDataSetChanged()
+            }
+            .setPositiveButton("Eliminar") { _, _ ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        AppContainer.getControlGastos(requireContext())
+                            .eliminarPorId(t.id)
+                        adapter.eliminarDeLista(t)
+                        cargar()  // recalcula totales y refresca
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Error al eliminar: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
+            .setCancelable(false)
+            .show()
     }
 
     override fun onResume() {

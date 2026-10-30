@@ -12,7 +12,8 @@ import modelo.Transaccion
 
 class TransaccionAdapter(
     private var lista: List<Transaccion> = emptyList(),
-    private var mapaCategorias: Map<Int, Categoria> = emptyMap()
+    private var mapaCategorias: Map<Int, Categoria> = emptyMap(),
+    private val onEliminar: ((Transaccion) -> Unit)? = null
 ) : RecyclerView.Adapter<TransaccionAdapter.VH>() {
 
     class VH(view: View) : RecyclerView.ViewHolder(view) {
@@ -38,15 +39,12 @@ class TransaccionAdapter(
         val rojo  = Color.parseColor("#C62828")
         val color = if (esGasto) rojo else verde
 
-        // Signo + color del círculo
         holder.tvSigno.text = if (esGasto) "−" else "+"
         (holder.tvSigno.background as? GradientDrawable)?.setColor(color)
 
-        // Descripción y detalle
         holder.tvDescripcion.text = t.descripcion
         holder.tvDetalle.text = "$nombreCat · ${t.fecha}"
 
-        // Monto con signo y color
         val signoStr = if (esGasto) "- " else "+ "
         holder.tvMonto.text = "$signoStr Q${t.monto}"
         holder.tvMonto.setTextColor(color)
@@ -58,5 +56,18 @@ class TransaccionAdapter(
         lista = nueva
         mapaCategorias = categorias
         notifyDataSetChanged()
+    }
+
+    /** Obtiene la transacción en una posición (útil para el swipe) */
+    fun getItemAt(position: Int): Transaccion? =
+        lista.getOrNull(position)
+
+    /** Quita una transacción de la lista local y notifica el cambio */
+    fun eliminarDeLista(transaccion: Transaccion) {
+        val idx = lista.indexOfFirst { it.id == transaccion.id }
+        if (idx >= 0) {
+            lista = lista.toMutableList().also { it.removeAt(idx) }
+            notifyItemRemoved(idx)
+        }
     }
 }

@@ -33,7 +33,39 @@ class ResumenFragment : Fragment() {
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
+        // 👇 NUEVO
+        crearSwipeEliminar(rv) { position ->
+            val t = adapter.getItemAt(position) ?: return@crearSwipeEliminar
+            confirmarEliminar(t, view)
+        }
+
         cargarResumen(view)
+    }
+
+    // 👇 NUEVO
+    private fun confirmarEliminar(t: modelo.Transaccion, rootView: View) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Eliminar transacción")
+            .setMessage("¿Eliminar \"${t.descripcion}\" por Q${t.monto}?")
+            .setNegativeButton("Cancelar") { _, _ -> adapter.notifyDataSetChanged() }
+            .setPositiveButton("Eliminar") { _, _ ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        AppContainer.getControlGastos(requireContext()).eliminarPorId(t.id)
+                        adapter.eliminarDeLista(t)
+                        cargarResumen(rootView)  // recalcula todos los totales y listas por categoría
+                    } catch (e: Exception) {
+                        android.widget.Toast.makeText(
+                            requireContext(),
+                            "Error al eliminar: ${e.message}",
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
+            .setCancelable(false)
+            .show()
     }
 
     private fun cargarResumen(view: View) {
