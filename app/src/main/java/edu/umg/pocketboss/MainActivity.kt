@@ -11,24 +11,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Siembra categorías por defecto la primera vez
+        CategoriasIniciales.sembrarSiHaceFalta(this)
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // Cargar la pestaña de Inicio por defecto al abrir la aplicación
         if (savedInstanceState == null) {
             cambiarPestana(InicioFragment())
         }
 
-        // Configurar la acción al hacer clic en las pestañas inferiores
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio -> {
-                    cambiarPestana(InicioFragment())
-                    true
-                }
-                R.id.nav_resumenes -> {
-                    cambiarPestana(ResumenFragment())
-                    true
-                }
+                R.id.nav_inicio -> { cambiarPestana(InicioFragment()); true }
+                R.id.nav_resumenes -> { cambiarPestana(ResumenFragment()); true }
                 else -> false
             }
         }

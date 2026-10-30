@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,7 +32,38 @@
         android:inputType="numberDecimal"
         android:layout_marginBottom="12dp" />
 
-    <!-- Spinner o campo provisional para categoría -->
+    <!-- Tipo de transacción -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tipo:"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <RadioGroup
+        android:id="@+id/rgTipoTransaccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <RadioButton
+            android:id="@+id/rbTipoGasto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gasto"
+            android:checked="true"
+            android:layout_marginEnd="24dp" />
+
+        <RadioButton
+            android:id="@+id/rbTipoIngreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingreso" />
+    </RadioGroup>
+
+    <!-- Categoría (filtrada por tipo) -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

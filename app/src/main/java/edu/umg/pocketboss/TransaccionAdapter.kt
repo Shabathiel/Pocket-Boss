@@ -1,6 +1,7 @@
 package edu.umg.pocketboss
 
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +16,15 @@ class TransaccionAdapter(
 ) : RecyclerView.Adapter<TransaccionAdapter.VH>() {
 
     class VH(view: View) : RecyclerView.ViewHolder(view) {
-        val tv1: TextView = view.findViewById(android.R.id.text1)
-        val tv2: TextView = view.findViewById(android.R.id.text2)
+        val tvSigno: TextView       = view.findViewById(R.id.tvSigno)
+        val tvDescripcion: TextView = view.findViewById(R.id.tvDescripcion)
+        val tvDetalle: TextView     = view.findViewById(R.id.tvDetalle)
+        val tvMonto: TextView       = view.findViewById(R.id.tvMonto)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val v = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_2, parent, false)
+            .inflate(R.layout.item_transaccion, parent, false)
         return VH(v)
     }
 
@@ -31,13 +34,22 @@ class TransaccionAdapter(
         val esGasto = cat?.esGasto ?: true
         val nombreCat = cat?.nombre ?: "Sin categoría"
 
-        holder.tv1.text = t.descripcion
+        val verde = Color.parseColor("#2E7D32")
+        val rojo  = Color.parseColor("#C62828")
+        val color = if (esGasto) rojo else verde
 
-        val signo = if (esGasto) "-" else "+"
-        holder.tv2.text = "$signo Q${t.monto} · $nombreCat · ${t.fecha}"
+        // Signo + color del círculo
+        holder.tvSigno.text = if (esGasto) "−" else "+"
+        (holder.tvSigno.background as? GradientDrawable)?.setColor(color)
 
-        val color = if (esGasto) Color.parseColor("#C62828") else Color.parseColor("#2E7D32")
-        holder.tv2.setTextColor(color)
+        // Descripción y detalle
+        holder.tvDescripcion.text = t.descripcion
+        holder.tvDetalle.text = "$nombreCat · ${t.fecha}"
+
+        // Monto con signo y color
+        val signoStr = if (esGasto) "- " else "+ "
+        holder.tvMonto.text = "$signoStr Q${t.monto}"
+        holder.tvMonto.setTextColor(color)
     }
 
     override fun getItemCount() = lista.size

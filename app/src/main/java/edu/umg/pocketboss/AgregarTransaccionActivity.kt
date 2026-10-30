@@ -4,13 +4,8 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import edu.umg.pocketboss.persistencia.CategoriaDao
-import edu.umg.pocketboss.persistencia.GastosDao
 import kotlinx.coroutines.launch
 import modelo.Categoria
-import modelo.Transaccion
-import java.text.SimpleDateFormat
-import java.util.*
 
 class AgregarTransaccionActivity : AppCompatActivity() {
 
@@ -18,74 +13,79 @@ class AgregarTransaccionActivity : AppCompatActivity() {
     private lateinit var etMonto: EditText
     private lateinit var spinnerCategorias: Spinner
     private lateinit var btnGuardar: Button
+    private lateinit var rgTipo: RadioGroup
+    private lateinit var rbGasto: RadioButton
 
-    private val gastosDao by lazy { GastosDao(this) }
-    private val categoriaDao by lazy { CategoriaDao(this) }
-
-    private var categoriasList: List<Categoria> = emptyList()
+    private var categoriasTodas: List<Categoria> = emptyList()
+    private var categoriasFiltradas: List<Categoria> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_transaccion)
 
-        etDescripcion = findViewById(R.id.etDescripcion)
-        etMonto = findViewById(R.id.etMonto)
+        etDescripcion     = findViewById(R.id.etDescripcion)
+        etMonto           = findViewById(R.id.etMonto)
         spinnerCategorias = findViewById(R.id.spinnerCategorias)
-        btnGuardar = findViewById(R.id.btnGuardarTransaccion)
+        btnGuardar        = findViewById(R.id.btnGuardarTransaccion)
+        rgTipo            = findViewById(R.id.rgTipoTransaccion)
+        rbGasto           = findViewById(R.id.rbTipoGasto)
 
-        cargarCategoriasEnSpinner()
+        rgTipo.setOnCheckedChangeListener { _, _ -> filtrarCategorias() }
 
-        btnGuardar.setOnClickListener { guardarTransaccion() }
+        cargarCategorias()
+
+        btnGuardar.setOnClickListener { guardar() }
     }
 
-    private fun cargarCategoriasEnSpinner() {
+    private fun cargarCategorias() {
         lifecycleScope.launch {
-            categoriasList = categoriaDao.listarCategorias()
-            val nombres = categoriasList.map { it.nombre }
-            val adapter = ArrayAdapter(
-                this@AgregarTransaccionActivity,
-                android.R.layout.simple_spinner_item,
-                nombres
-            )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinnerCategorias.adapter = adapter
+            categoriasTodas = AppContainer.getControlCategorias(this@AgregarTransaccionActivity)
+                .listarCategorias()
+            filtrarCategorias()
         }
     }
 
-    private fun guardarTransaccion() {
-        val descripcionStr = etDescripcion.text.toString().trim()
-        val montoStr = etMonto.text.toString().trim()
+    private fun filtrarCategorias() {
+        val esGasto = rbGasto.isChecked
+        categoriasFiltradas = categoriasTodas.filter { it.esGasto == esGasto }
 
-        if (descripcionStr.isEmpty() || montoStr.isEmpty()) {
-            Toast.makeText(this, "Llena todos los campos", Toast.LENGTH_SHORT).show()
+        val nombres = categoriasFiltradas.map { it.nombre }
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            nombres
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerCategorias.adapter = adapter
+    }
+
+    private fun guardar() {
+        val descripcion = etDescripcion.text.toString().trim()
+        val montoStr    = etMonto.text.toString().trim()
+        val monto       = montoStr.toIntOrNull() ?: 0
+
+        if (categoriasFiltradas.isEmpty()) {
+            Toast.makeText(this, "No hay categorías de ese tipo. Crea una primero.", Toast.LENGTH_LONG).show()
             return
         }
 
-        val montoInt = montoStr.toIntOrNull() ?: 0
-        if (montoInt <= 0) {
-            Toast.makeText(this, "El monto debe ser mayor a 0", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (categoriasList.isEmpty()) {
-            Toast.makeText(this, "Crea una categoría primero", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val categoriaSeleccionada = categoriasList[spinnerCategorias.selectedItemPosition]
-        val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val categoriaNombre = categoriasFiltradas[spinnerCategorias.selectedItemPosition].nombre
+        val fecha = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+            .format(java.util.Date())
 
         lifecycleScope.launch {
             try {
-                val nuevaTransaccion = Transaccion(
-                    descripcion = descripcionStr,
-                    monto = montoInt,
-                    categoria = categoriaSeleccionada.id,
-                    fecha = fechaActual
-                )
-                gastosDao.agregar(nuevaTransaccion)
-                Toast.makeText(this@AgregarTransaccionActivity, "Guardado", Toast.LENGTH_SHORT).show()
+                AppContainer.getControlGastos(this@AgregarTransaccionActivity)
+                    .agregar(
+                        descripcion = descripcion,
+                        monto = monto,
+                        categoria = categoriaNombre,
+                        fecha = fecha
+                    )
+                Toast.makeText(this@AgregarTransaccionActivity, "Transacción guardada", Toast.LENGTH_SHORT).show()
                 finish()
+            } catch (e: IllegalArgumentException) {
+                Toast.makeText(this@AgregarTransaccionActivity, "Validación: ${e.message}", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Toast.makeText(this@AgregarTransaccionActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
