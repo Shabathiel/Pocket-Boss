@@ -24,11 +24,30 @@
             android:textStyle="bold" />
 
         <!-- Saldo Actual -->
+        <!-- Totales -->
+        <TextView
+            android:id="@+id/tvIngresos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingresos: Q0"
+            android:textSize="16sp"
+            android:textColor="#2E7D32"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvGastos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gastos: Q0"
+            android:textSize="16sp"
+            android:textColor="#C62828"
+            android:layout_marginTop="4dp" />
+
         <TextView
             android:id="@+id/tvSaldo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Saldo: Q0.00"
+            android:text="Balance: Q0"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"

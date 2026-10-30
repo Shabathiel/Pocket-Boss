@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,16 +14,31 @@
         android:text="Resumen General"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="8dp" />
 
-    <!-- Aquí puedes poner filtros o un listado completo después -->
+    <!-- Totales + agrupados por categoría (texto) -->
     <TextView
         android:id="@+id/tvDetalleResumen"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aquí se mostrará el resumen de todos los gastos e ingresos."
+        android:textSize="14sp"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Todas las transacciones"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Lista completa (mismo adapter que Inicio) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTodasTransacciones"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Aquí se mostrará el resumen de todos los gastos e ingresos."
-        android:textSize="16sp" />
-
+        tools:listitem="@android:layout/simple_list_item_2" />
 
 </LinearLayout>
